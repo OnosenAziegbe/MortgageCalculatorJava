@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.noteme.R;
+import com.example.mortgagecalculatorjava.R;
 
 
 public class MainActivity extends AppCompatActivity {
