@@ -1,78 +1,61 @@
 package com.example.mortgagecalculatorjava;
 
-import android.os.Bundle;
 
-import com.google.android.material.snackbar.Snackbar;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.view.View;
+import com.example.noteme.R;
 
-import androidx.core.view.WindowCompat;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
-import com.example.mortgagecalculatorjava.databinding.ActivityMainBinding;
-
-import android.view.Menu;
-import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
-    private AppBarConfiguration appBarConfiguration;
-    private ActivityMainBinding binding;
+    private EditText editTextAmount;
+    private EditText editTextInterestRate;
+    private EditText editTextTenure;
+    private TextView textViewResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
-        setSupportActionBar(binding.toolbar);
-
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAnchorView(R.id.fab)
-                        .setAction("Action", null).show();
-            }
-        });
+        editTextAmount = findViewById(R.id.editTextAmount);
+        editTextInterestRate = findViewById(R.id.editTextInterestRate);
+        editTextTenure = findViewById(R.id.editTextTenure);
+        textViewResult = findViewById(R.id.textViewResult);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
+    public void calculateEMI(View view) {
+        String amountString = editTextAmount.getText().toString();
+        String interestRateString = editTextInterestRate.getText().toString();
+        String tenureString = editTextTenure.getText().toString();
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (TextUtils.isEmpty(amountString) || TextUtils.isEmpty(interestRateString) || TextUtils.isEmpty(tenureString)) {
+            // Handle empty input fields
+            textViewResult.setText("Please enter all values");
+            return;
         }
 
-        return super.onOptionsItemSelected(item);
-    }
+        double principal = Double.parseDouble(amountString);
+        double interestRate = Double.parseDouble(interestRateString);
+        double tenure = Double.parseDouble(tenureString);
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
+        // Monthly interest rate
+        double monthlyRate = interestRate / 100 / 12;
+
+        // Total number of payments
+        double totalPayments = tenure * 12;
+
+        // Calculate EMI using the formula
+        double emi = (principal * monthlyRate * Math.pow(1 + monthlyRate, totalPayments)) /
+                (Math.pow(1 + monthlyRate, totalPayments) - 1);
+
+        // Display the result
+        textViewResult.setText("Monthly EMI: $" + String.format("%.2f", emi));
     }
 }

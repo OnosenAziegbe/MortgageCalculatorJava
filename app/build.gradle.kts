@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.noteme"
+    namespace = "com.example.mortgagecalculatorjava"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.noteme"
+        applicationId = "com.example.mortgagecalculatorjava"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

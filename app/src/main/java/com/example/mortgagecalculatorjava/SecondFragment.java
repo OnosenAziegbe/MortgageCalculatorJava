@@ -9,7 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.mortgagecalculatorjava.databinding.FragmentSecondBinding;
+import com.example.noteme.R;
+import com.example.noteme.databinding.FragmentSecondBinding;
 
 public class SecondFragment extends Fragment {
 
